@@ -1,0 +1,71 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../jqueryeasyui/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../jqueryeasyui/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" href="../zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="../zTree/js/jquery.ztree.core-3.5.js"></script>
+    <link rel="stylesheet" type="text/css" href="../jqueryeasyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../jqueryeasyui/themes/icon.css">
+    <script type="text/javascript">
+                var setting = {
+                    data: {
+                        simpleData: {
+                            enable: true
+                        }
+                    },
+                    callback: {
+                        onClick: zTreeOnClick
+                    }
+                };
+
+                $(document).ready(function(){
+                    $.ajax({
+                        url:"user/lefttree",
+                        async:false,
+                        type:'get',
+                        dataType:'json',
+                        success:function(text)
+                        {
+                            $.fn.zTree.init($("#treeDemo"), setting, text);
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            alert(XMLHttpRequest.status);
+                            alert(XMLHttpRequest.readyState);
+                            alert(textStatus);
+                        }
+                    });
+                });
+
+                function zTreeOnClick(event, treeId, treeNode) {
+                    Open(treeNode.name, treeNode.myurl);
+                }
+
+                function Open(text, url) {
+                    $("#p").panel({
+                        title: text,
+                        fit: true
+                    }).panel('refresh', url);
+                }
+    </script>
+</head>
+<body class="easyui-layout">
+<form id="form1">
+    <div data-options="region:'north',border:false" style="height:40px;">
+    <img src="../images/top-l.jpg" align="left" width='85%' height='200'/>
+    {$username}&nbsp;<a href="{:U('login/logout')}">退出系统</a><span
+    style="margin-right: 30px;"></span>
+    </div>
+    <div data-options="region:'west',split:true,title:'功能菜单'" style="width:200px;padding:0px;">
+    <ul id="treeDemo" class="ztree">
+    </div>
+    <div data-options="region:'south',border:false" style="height:50px;padding:15px;text-align: center;">版权所有： ? 2015
+    水云间工作室 CopyRight All Rights Reserved. 技术支持：水云间工作室
+    </div>
+    <div data-options="region:'center',title:'工作区'">
+    <div id="p" class="easyui-panel" title="用户基本信息" data-options="fit:true,href:'user/main'"></div>
+    </div>
+</form>
+</body>
+</html>
